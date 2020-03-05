@@ -14,6 +14,7 @@ class JsonSchema extends StatefulWidget {
     this.validations = const {},
     this.decorations = const {},
     this.buttonSave,
+    this.addBeneficiaryWidget,
     this.actionSave,
   });
 
@@ -24,6 +25,7 @@ class JsonSchema extends StatefulWidget {
   final Map formMap;
   final double padding;
   final Widget buttonSave;
+  final Widget addBeneficiaryWidget;
   final Function actionSave;
   final ValueChanged<dynamic> onChanged;
 
@@ -78,15 +80,22 @@ class _CoreFormState extends State<JsonSchema> {
   List<Widget> jsonToForm() {
     List<Widget> listWidget = new List<Widget>();
     if (formGeneral['title'] != null) {
-      listWidget.add(Text(
-        formGeneral['title'],
-        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+      listWidget.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        child: Text(
+          formGeneral['title'],
+          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
       ));
     }
     if (formGeneral['description'] != null) {
-      listWidget.add(Text(
-        formGeneral['description'],
-        style: new TextStyle(fontSize: 14.0,fontStyle: FontStyle.italic),
+      listWidget.add(Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        child: Text(
+          formGeneral['description'],
+          style: new TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic),
+        ),
       ));
     }
 
@@ -116,7 +125,7 @@ class _CoreFormState extends State<JsonSchema> {
               label,
               new TextFormField(
                 controller: null,
-                initialValue:  formGeneral['fields'][count]['value']??null,
+                initialValue: formGeneral['fields'][count]['value'] ?? null,
                 decoration: item['decoration'] ??
                     widget.decorations[item['key']] ??
                     new InputDecoration(
@@ -276,14 +285,35 @@ class _CoreFormState extends State<JsonSchema> {
         }
 
         listWidget.add(new Container(
-          margin: new EdgeInsets.only(top: 5.0),
+          margin: new EdgeInsets.only(top: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               label,
+              new SizedBox(
+                height: 6.0,
+              ),
               new DropdownButton<String>(
-                hint: new Text("Select a user"),
+                isExpanded: true,
+                hint: Container(
+                  alignment: Alignment.centerLeft,
+                  child: new Text(
+                    item['placeholder'] ?? "Select",
+                  ),
+                ),
                 value: formGeneral['fields'][count]['value'],
+                selectedItemBuilder: (BuildContext context) {
+                  return item['items'].map<Widget>((dynamic data) {
+                    return Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        data['label'],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    );
+                  }).toList();
+                },
                 onChanged: (String newValue) {
                   setState(() {
                     formGeneral['fields'][count]['value'] = newValue;
@@ -304,6 +334,16 @@ class _CoreFormState extends State<JsonSchema> {
             ],
           ),
         ));
+
+        //add custom widget for add beneficiary
+        if (item['addBeneficiaryButton'] == true &&
+            widget.addBeneficiaryWidget != null) {
+          listWidget.add(
+            new Container(
+              child: widget.addBeneficiaryWidget,
+            ),
+          );
+        }
       }
     }
 
