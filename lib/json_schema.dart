@@ -15,6 +15,7 @@ class JsonSchema extends StatefulWidget {
     this.decorations = const {},
     this.buttonSave,
     this.addBeneficiaryWidget,
+    this.addCalendarWidget,
     this.actionSave,
   });
 
@@ -26,6 +27,7 @@ class JsonSchema extends StatefulWidget {
   final double padding;
   final Widget buttonSave;
   final Widget addBeneficiaryWidget;
+  final Widget addCalendarWidget;
   final Function actionSave;
   final ValueChanged<dynamic> onChanged;
 
@@ -43,7 +45,7 @@ class _CoreFormState extends State<JsonSchema> {
 
   String isRequired(item, value) {
     if (value.isEmpty) {
-      return widget.errorMessages[item['key']] ?? 'Please enter some text';
+      return widget.errorMessages[item['key']] ?? 'Required field';
     }
     return null;
   }
@@ -232,6 +234,17 @@ class _CoreFormState extends State<JsonSchema> {
             ]),
           ),
         );
+
+        //add calendar view
+        if (item['show_date_field'] == true &&
+            widget.addBeneficiaryWidget != null &&
+            !item['value']) {
+          listWidget.add(
+            new Container(
+              child: widget.addCalendarWidget,
+            ),
+          );
+        }
       }
 
       if (item['type'] == "Checkbox") {
