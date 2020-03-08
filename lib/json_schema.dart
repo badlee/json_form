@@ -221,7 +221,18 @@ class _CoreFormState extends State<JsonSchema> {
           new Container(
             margin: new EdgeInsets.only(top: 5.0),
             child: new Row(children: <Widget>[
-              new Expanded(child: new Text(item['label'])),
+              new Expanded(
+                child: new Text(
+                  item['label'],
+                  style: new TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16.0),
+                ),
+              ),
+              Text(
+                'Later',
+                style:
+                    new TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
+              ),
               new Switch(
                 value: item['value'] ?? false,
                 onChanged: (bool value) {
@@ -230,6 +241,11 @@ class _CoreFormState extends State<JsonSchema> {
                     _handleChanged();
                   });
                 },
+              ),
+              Text(
+                'Now',
+                style:
+                    new TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
               ),
             ]),
           ),
