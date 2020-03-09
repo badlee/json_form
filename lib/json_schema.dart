@@ -360,6 +360,9 @@ class _CoreFormState extends State<JsonSchema> {
                   );
                 }).toList(),
               ),
+              new SizedBox(
+                height: 6.0,
+              ),
             ],
           ),
         ));
