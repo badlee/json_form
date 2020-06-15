@@ -1,4 +1,4 @@
-library json_to_form;
+library json_form;
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
